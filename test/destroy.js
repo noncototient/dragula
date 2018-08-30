@@ -3,6 +3,23 @@
 var test = require('tape');
 var dragula = require('..');
 
+test('with normal DOM', function(t) {
+  domTests(t, document.body);
+  t.end();
+});
+
+test('with nested shadow DOM', function(t) {
+  var div = document.createElement('div');
+  var div2 = document.createElement('div');
+  div.createShadowRoot();
+  div2.createShadowRoot();
+  div.shadowRoot.appendChild(div2);
+  document.body.appendChild(div);
+
+  domTests(t, div2.shadowRoot);
+  t.end();
+});
+
 test('destroy does not throw when not dragging, destroyed, or whatever', function (t) {
   t.test('a single time', function once (st) {
     var drake = dragula();
